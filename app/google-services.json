@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1020137500594",
+    "firebase_url": "https://novosispu.firebaseio.com",
+    "project_id": "novosispu",
+    "storage_bucket": "novosispu.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1020137500594:android:271ae2f90f7f7530",
+        "android_client_info": {
+          "package_name": "mobile.ufc.br.novosispu"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1020137500594-qiggqsrpn46hpba9siongvscmk9sbqe6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "mobile.ufc.br.novosispu",
+            "certificate_hash": "104841cd689d7defbdc66f11a80622901fce0118"
+          }
+        },
+        {
+          "client_id": "1020137500594-8imfj1e7c5f5790b3oqetrise6ddcttp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmHJnL9KAJJaEaiGreNyOytL-7M5VHffo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1020137500594-8imfj1e7c5f5790b3oqetrise6ddcttp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
