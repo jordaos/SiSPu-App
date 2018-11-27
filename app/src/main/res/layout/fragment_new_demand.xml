@@ -44,7 +44,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <EditText
-                android:id="@+id/shipper_field"
+                android:id="@+id/descriptionNewDemandEditText"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
                 android:gravity="top"
@@ -57,7 +57,7 @@
         </android.support.design.widget.TextInputLayout>
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/newDemandButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Salvar"

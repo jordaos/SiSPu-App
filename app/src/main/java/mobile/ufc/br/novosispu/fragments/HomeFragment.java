@@ -1,9 +1,13 @@
 package mobile.ufc.br.novosispu.fragments;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -16,8 +20,18 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import mobile.ufc.br.novosispu.R;
 import mobile.ufc.br.novosispu.components.CardViewComponent;
+import mobile.ufc.br.novosispu.entities.Demand;
+import mobile.ufc.br.novosispu.service.DemandService;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -30,50 +44,29 @@ public class HomeFragment extends Fragment {
 
     private FrameLayout thisPage;
     private FloatingActionButton newDemandFab;
+    private View mProgressView;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private DemandService demandService;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     public HomeFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment HomeFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static HomeFragment newInstance(String param1, String param2) {
         HomeFragment fragment = new HomeFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
+        demandService = new DemandService();
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_home, container, false);
 
@@ -84,13 +77,35 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         newDemandFab = (FloatingActionButton) getView().findViewById(R.id.newDemandFab);
         thisPage = (FrameLayout) getView().findViewById(R.id.homeFragment);
-        CardViewComponent card = new CardViewComponent(getContext());
-        card.setTitle("Jordao");
-        thisPage.addView(card);
+        mProgressView = getView().findViewById(R.id.login_progress);
+
+        showProgress(true);
+
+        List<Demand> demands = new ArrayList<>();
+        DatabaseReference demandRef = demandService.getDemandRef();
+
+        demandRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                showProgress(false);
+                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+                    Demand demand = postSnapshot.getValue(Demand.class);
+
+                    CardViewComponent card = new CardViewComponent(getContext());
+                    card.setTitle(demand.getTitle());
+                    card.setDescription(demand.getDescription());
+                    thisPage.addView(card);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e("The read failed: ", databaseError.getMessage());
+            }
+        });
 
         newDemandFab.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Log.d("tag", "Aqui");
                 NewDemandFragment newDemandFragment = new NewDemandFragment();
                 FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -98,5 +113,22 @@ public class HomeFragment extends Fragment {
                 fragmentTransaction.commit();
             }
         });
+    }
+
+    private void showProgress(final boolean show) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mProgressView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+                }
+            });
+        } else {
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+        }
     }
 }
