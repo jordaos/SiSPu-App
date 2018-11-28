@@ -11,10 +11,12 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import mobile.ufc.br.novosispu.fragments.HomeFragment;
+import mobile.ufc.br.novosispu.fragments.MapDemandsFragment;
 
 public class MainActivity extends AppCompatActivity {
 
     final Fragment fragment1 = new HomeFragment();
+    final Fragment fragment2 = new MapDemandsFragment();
     final FragmentManager fm = getSupportFragmentManager();
     private Fragment active = fragment1;
 
@@ -44,8 +46,8 @@ public class MainActivity extends AppCompatActivity {
                     fragmentTransaction.commit();
                     return true;
                 case R.id.navigation_dashboard:
-                    fm.beginTransaction().hide(active).show(fragment1).commit();
-                    active = fragment1;
+                    fragmentTransaction.replace(R.id.main_container, fragment2);
+                    fragmentTransaction.commit();
                     return true;
                 case R.id.navigation_notifications:
                     fm.beginTransaction().hide(active).show(fragment1).commit();
