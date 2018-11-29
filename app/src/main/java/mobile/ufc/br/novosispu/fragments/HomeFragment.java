@@ -2,6 +2,7 @@ package mobile.ufc.br.novosispu.fragments;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -28,10 +29,13 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import mobile.ufc.br.novosispu.MainActivity;
 import mobile.ufc.br.novosispu.R;
 import mobile.ufc.br.novosispu.components.CardViewComponent;
 import mobile.ufc.br.novosispu.entities.Demand;
 import mobile.ufc.br.novosispu.service.DemandService;
+
+import static mobile.ufc.br.novosispu.Constants.FRAGMENT_NEW_DEMAND_ID;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -45,6 +49,7 @@ public class HomeFragment extends Fragment {
     private FrameLayout thisPage;
     private FloatingActionButton newDemandFab;
     private View mProgressView;
+    private LinearLayout contentDemands;
 
     private DemandService demandService;
 
@@ -53,7 +58,7 @@ public class HomeFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static HomeFragment newInstance(String param1, String param2) {
+    public static HomeFragment newInstance() {
         HomeFragment fragment = new HomeFragment();
         return fragment;
     }
@@ -68,33 +73,41 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
         return inflater.inflate(R.layout.fragment_home, container, false);
-
-
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         newDemandFab = (FloatingActionButton) getView().findViewById(R.id.newDemandFab);
         thisPage = (FrameLayout) getView().findViewById(R.id.homeFragment);
         mProgressView = getView().findViewById(R.id.login_progress);
+        contentDemands = (LinearLayout) thisPage.findViewById(R.id.contentDemands);
 
         showProgress(true);
 
         List<Demand> demands = new ArrayList<>();
         DatabaseReference demandRef = demandService.getDemandRef();
 
+        final LayoutInflater inflater = getLayoutInflater();
+
         demandRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 showProgress(false);
+                contentDemands.removeAllViews();
                 for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
                     Demand demand = postSnapshot.getValue(Demand.class);
 
                     CardViewComponent card = new CardViewComponent(getContext());
                     card.setTitle(demand.getTitle());
                     card.setDescription(demand.getDescription());
-                    thisPage.addView(card);
+
+                    if(demand.getImageUrl() != null && !demand.getImageUrl().equals("")) {
+                        card.setDemandImage(demand.getImageUrl());
+                    }
+
+                    contentDemands.addView(card);
                 }
             }
 
@@ -106,11 +119,7 @@ public class HomeFragment extends Fragment {
 
         newDemandFab.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                NewDemandFragment newDemandFragment = new NewDemandFragment();
-                FragmentManager fragmentManager = getFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.main_container, newDemandFragment);
-                fragmentTransaction.commit();
+                ((MainActivity)getActivity()).changeFragmentTo(FRAGMENT_NEW_DEMAND_ID);
             }
         });
     }
@@ -130,5 +139,15 @@ public class HomeFragment extends Fragment {
         } else {
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
         }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
     }
 }

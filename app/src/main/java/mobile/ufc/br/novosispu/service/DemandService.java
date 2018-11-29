@@ -14,13 +14,15 @@ import java.util.List;
 
 import mobile.ufc.br.novosispu.entities.Demand;
 
+import static mobile.ufc.br.novosispu.Constants.FIREBASE_CHILD_DEMANDS;
+
 public class DemandService {
     private FirebaseDatabase database;
     private DatabaseReference demandRef;
 
     public DemandService() {
         database = FirebaseDatabase.getInstance();
-        demandRef = database.getReference("demands");
+        demandRef = database.getReference(FIREBASE_CHILD_DEMANDS);
     }
 
     public void save(Demand demand) {

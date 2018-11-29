@@ -31,7 +31,7 @@ public class MapDemandsFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static MapDemandsFragment newInstance(String param1, String param2) {
+    public static MapDemandsFragment newInstance() {
         MapDemandsFragment fragment = new MapDemandsFragment();
         return fragment;
     }

@@ -6,6 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".fragments.HomeFragment">
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:id="@+id/contentDemands"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></LinearLayout>
+    </ScrollView>
+
     <!-- Login progress -->
     <ProgressBar
         android:id="@+id/login_progress"

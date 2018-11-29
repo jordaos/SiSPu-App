@@ -8,6 +8,7 @@ public class Demand {
     private String description;
     private String title;
     private String userKey;
+    private String imageUrl;
 
     public Demand(String key, long lat, long lng, long time, String description, String title, String userKey) {
         this.key = key;
@@ -17,6 +18,17 @@ public class Demand {
         this.description = description;
         this.title = title;
         this.userKey = userKey;
+    }
+
+    public Demand(String key, long lat, long lng, long time, String description, String title, String userKey, String imageUrl) {
+        this.key = key;
+        this.lat = lat;
+        this.lng = lng;
+        this.time = time;
+        this.description = description;
+        this.title = title;
+        this.userKey = userKey;
+        this.imageUrl = imageUrl;
     }
 
     public Demand() {
@@ -83,6 +95,19 @@ public class Demand {
 
     public void setUserKey(String userKey) {
         this.userKey = userKey;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getLargeImageUrl(String imageUrl) {
+        String largeImageUrl = imageUrl.substring(0, imageUrl.length() - 6).concat("o.jpg");
+        return largeImageUrl;
     }
 
     @Override
