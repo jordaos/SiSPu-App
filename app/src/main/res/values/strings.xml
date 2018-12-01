@@ -25,4 +25,10 @@
 
     <string name="google_maps_api_key">AIzaSyB4RFLk-rWSpSuSXMeFWUyxHv--3BIxmW8</string>
     <string name="name">Nome</string>
+
+    <string name="facebook_app_id">504264756730916</string>
+    <string name="fb_login_protocol_scheme">fb504264756730916</string>
+    <string name="logout">Sair</string>
+    <string name="title_options">Opções</string>
+    <string name="title_map">Mapa</string>
 </resources>

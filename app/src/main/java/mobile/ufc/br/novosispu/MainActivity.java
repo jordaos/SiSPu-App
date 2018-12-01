@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import mobile.ufc.br.novosispu.fragments.HomeFragment;
 import mobile.ufc.br.novosispu.fragments.MapDemandsFragment;
 import mobile.ufc.br.novosispu.fragments.NewDemandFragment;
+import mobile.ufc.br.novosispu.fragments.OptionsFragment;
 
 import static mobile.ufc.br.novosispu.Constants.*;
 
@@ -21,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     final Fragment homeFragment = HomeFragment.newInstance();
     final Fragment mapDemandFragment = MapDemandsFragment.newInstance();
     final Fragment newDemandFragment = NewDemandFragment.newInstance();
+    final Fragment optionsFragment = OptionsFragment.newInstance();
     final FragmentManager fm = getSupportFragmentManager();
     private Fragment active = homeFragment;
 
@@ -46,11 +48,11 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.navigation_home:
                     changeFragmentTo(FRAGMENT_HOME_ID);
                     return true;
-                case R.id.navigation_dashboard:
+                case R.id.navigation_map:
                     changeFragmentTo(FRAGMENT_MAP_ID);
                     return true;
-                case R.id.navigation_notifications:
-                    changeFragmentTo(FRAGMENT_HOME_ID);
+                case R.id.navigation_options:
+                    changeFragmentTo(FRAGMENT_OPTIONS_ID);
                     return true;
             }
             return false;
@@ -68,6 +70,9 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case FRAGMENT_NEW_DEMAND_ID:
                 fragmentTransaction.replace(R.id.main_container, newDemandFragment);
+                break;
+            case FRAGMENT_OPTIONS_ID:
+                fragmentTransaction.replace(R.id.main_container, optionsFragment);
                 break;
             default:
                 fragmentTransaction.replace(R.id.main_container, homeFragment);
