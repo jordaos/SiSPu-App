@@ -38,14 +38,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <Button
+                android:id="@+id/likeDemandButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Share"
+                android:text="Like (5)"
                 android:theme="@style/PrimaryFlatButton" />
             <Button
+                android:id="@+id/viewDemandButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Expore"
+                android:text="View"
                 android:theme="@style/PrimaryFlatButton" />
         </LinearLayout>
     </LinearLayout>

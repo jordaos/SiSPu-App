@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.SyncStateContract;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -25,8 +26,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Date;
@@ -34,6 +38,7 @@ import java.util.Date;
 import mobile.ufc.br.novosispu.MainActivity;
 import mobile.ufc.br.novosispu.R;
 import mobile.ufc.br.novosispu.entities.Demand;
+import mobile.ufc.br.novosispu.entities.User;
 import mobile.ufc.br.novosispu.service.DemandService;
 import mobile.ufc.br.novosispu.service.UserService;
 
@@ -87,24 +92,37 @@ public class NewDemandFragment extends Fragment {
         newDemandButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Demand demand = new Demand();
-                demand.setTitle(titleNewDemandEditText.getText().toString());
-                demand.setDescription(descriptionNewDemandEditText.getText().toString());
-                demand.setTime(new Date().getTime());
-                demand.setUserKey(userService.getCurrentUserKey());
+                DatabaseReference userRef = userService.getUsersRef();
+                userRef.child(userService.getCurrentUserKey()).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        User user = dataSnapshot.getValue(User.class);
 
-                // Image
-                if(imageBitmap != null) {
-                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-                    String imageEncoded = Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
+                        Demand demand = new Demand();
+                        demand.setTitle(titleNewDemandEditText.getText().toString());
+                        demand.setDescription(descriptionNewDemandEditText.getText().toString());
+                        demand.setTime(new Date().getTime());
+                        demand.setUser(user);
 
-                    demand.setImageUrl(imageEncoded);
-                }
+                        // Image
+                        if(imageBitmap != null) {
+                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                            imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+                            String imageEncoded = Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
 
-                demandService.save(demand);
+                            demand.setImageUrl(imageEncoded);
+                        }
 
-                ((MainActivity)getActivity()).changeFragmentTo(FRAGMENT_HOME_ID);
+                        demandService.save(demand);
+
+                        ((MainActivity)getActivity()).changeFragmentTo(FRAGMENT_HOME_ID);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
             }
         });
 

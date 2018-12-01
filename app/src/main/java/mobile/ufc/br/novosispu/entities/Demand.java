@@ -7,27 +7,27 @@ public class Demand {
     private long time;
     private String description;
     private String title;
-    private String userKey;
+    private User user;
     private String imageUrl;
 
-    public Demand(String key, long lat, long lng, long time, String description, String title, String userKey) {
+    public Demand(String key, long lat, long lng, long time, String description, String title, User user) {
         this.key = key;
         this.lat = lat;
         this.lng = lng;
         this.time = time;
         this.description = description;
         this.title = title;
-        this.userKey = userKey;
+        this.user = user;
     }
 
-    public Demand(String key, long lat, long lng, long time, String description, String title, String userKey, String imageUrl) {
+    public Demand(String key, long lat, long lng, long time, String description, String title, User user, String imageUrl) {
         this.key = key;
         this.lat = lat;
         this.lng = lng;
         this.time = time;
         this.description = description;
         this.title = title;
-        this.userKey = userKey;
+        this.user = user;
         this.imageUrl = imageUrl;
     }
 
@@ -38,7 +38,7 @@ public class Demand {
         this.time = 0;
         this.description = "";
         this.title = "";
-        this.userKey = "";
+        this.user = new User("", "");
     }
 
     public String getKey() {
@@ -89,12 +89,12 @@ public class Demand {
         this.title = title;
     }
 
-    public String getUserKey() {
-        return userKey;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserKey(String userKey) {
-        this.userKey = userKey;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public String getImageUrl() {
@@ -119,7 +119,7 @@ public class Demand {
                 ", time=" + time +
                 ", description='" + description + '\'' +
                 ", title='" + title + '\'' +
-                ", userKey='" + userKey + '\'' +
+                ", user='" + user.getEmail() + '\'' +
                 '}';
     }
 }

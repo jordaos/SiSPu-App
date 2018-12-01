@@ -27,7 +27,7 @@ public class DemandService {
 
     public void save(Demand demand) {
         String key = demand.getKey();
-        if(key.equals("") || key == null) {
+        if(key == null || key.equals("")) {
             key = demandRef.push().getKey();
             demand.setKey(key);
         }

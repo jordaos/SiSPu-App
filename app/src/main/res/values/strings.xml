@@ -24,4 +24,5 @@
     <string name="description_new_demand">Descrição</string>
 
     <string name="google_maps_api_key">AIzaSyB4RFLk-rWSpSuSXMeFWUyxHv--3BIxmW8</string>
+    <string name="name">Nome</string>
 </resources>

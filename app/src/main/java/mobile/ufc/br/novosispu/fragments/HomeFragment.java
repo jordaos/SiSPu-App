@@ -33,7 +33,9 @@ import mobile.ufc.br.novosispu.MainActivity;
 import mobile.ufc.br.novosispu.R;
 import mobile.ufc.br.novosispu.components.CardViewComponent;
 import mobile.ufc.br.novosispu.entities.Demand;
+import mobile.ufc.br.novosispu.entities.Like;
 import mobile.ufc.br.novosispu.service.DemandService;
+import mobile.ufc.br.novosispu.service.LikeService;
 
 import static mobile.ufc.br.novosispu.Constants.FRAGMENT_NEW_DEMAND_ID;
 
@@ -52,7 +54,7 @@ public class HomeFragment extends Fragment {
     private LinearLayout contentDemands;
 
     private DemandService demandService;
-
+    private LikeService likeService;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -68,6 +70,7 @@ public class HomeFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         demandService = new DemandService();
+        likeService = new LikeService();
     }
 
     @Override
@@ -96,16 +99,31 @@ public class HomeFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 showProgress(false);
                 contentDemands.removeAllViews();
-                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
-                    Demand demand = postSnapshot.getValue(Demand.class);
+                for (DataSnapshot item: dataSnapshot.getChildren()) {
+                    final Demand demand = item.getValue(Demand.class);
 
-                    CardViewComponent card = new CardViewComponent(getContext());
-                    card.setTitle(demand.getTitle());
-                    card.setDescription(demand.getDescription());
+                    final CardViewComponent card = new CardViewComponent(getContext());
+                    card.setDemand(demand);
 
-                    if(demand.getImageUrl() != null && !demand.getImageUrl().equals("")) {
-                        card.setDemandImage(demand.getImageUrl());
-                    }
+                    likeService.getLikesRef().addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            int count = 0;
+                            for (DataSnapshot item : dataSnapshot.getChildren()) {
+                                Like like = item.getValue(Like.class);
+
+                                if(like.getDemandKey().equals(demand.getKey())) {
+                                    count++;
+                                }
+                            }
+                            card.setLikeDemandButton(count);
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
 
                     contentDemands.addView(card);
                 }

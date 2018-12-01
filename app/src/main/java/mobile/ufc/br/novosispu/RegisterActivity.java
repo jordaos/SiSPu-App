@@ -17,6 +17,9 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import mobile.ufc.br.novosispu.entities.User;
+import mobile.ufc.br.novosispu.service.UserService;
+
 public class RegisterActivity extends AppCompatActivity {
 
     private static final String TAG = "RegisterActivity";
@@ -24,14 +27,17 @@ public class RegisterActivity extends AppCompatActivity {
     private Button goToLoginButton;
     private EditText emailEditText;
     private EditText passwordEditText;
+    private EditText nameEditText;
 
     private FirebaseAuth mAuth;
+    private UserService userService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        userService = new UserService();
         FirebaseApp.initializeApp(this);
         mAuth = FirebaseAuth.getInstance();
 
@@ -39,18 +45,22 @@ public class RegisterActivity extends AppCompatActivity {
         goToLoginButton = (Button) findViewById(R.id.goToLoginButton);
         emailEditText = (EditText) findViewById(R.id.emailEditText);
         passwordEditText = (EditText) findViewById(R.id.passwordEditText);
+        nameEditText = (EditText) findViewById(R.id.nameEditText);
 
         salvarButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mAuth.createUserWithEmailAndPassword(emailEditText.getText().toString(), passwordEditText.getText().toString())
+                final String userEmail = emailEditText.getText().toString();
+                final String userPass = passwordEditText.getText().toString();
+                final String userName = nameEditText.getText().toString();
+                mAuth.createUserWithEmailAndPassword(userEmail, userPass)
                         .addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
-                                    // Sign in success, update UI with the signed-in user's information
-                                    Log.d(TAG, "createUserWithEmail:success");
-                                    FirebaseUser user = mAuth.getCurrentUser();
+                                    String userKey = mAuth.getCurrentUser().getUid();
+                                    User user = new User(userKey, userName, userEmail);
+                                    userService.save(user);
                                     Toast.makeText(RegisterActivity.this, "Cadastro efetuado com sucesso.", Toast.LENGTH_SHORT).show();
                                     Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                                     startActivity(intent);
