@@ -3,17 +3,24 @@ package mobile.ufc.br.novosispu.fragments;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,7 +33,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import mobile.ufc.br.novosispu.MainActivity;
@@ -34,9 +43,13 @@ import mobile.ufc.br.novosispu.R;
 import mobile.ufc.br.novosispu.components.CardViewComponent;
 import mobile.ufc.br.novosispu.entities.Demand;
 import mobile.ufc.br.novosispu.entities.Like;
+import mobile.ufc.br.novosispu.entities.User;
 import mobile.ufc.br.novosispu.service.DemandService;
 import mobile.ufc.br.novosispu.service.LikeService;
+import mobile.ufc.br.novosispu.service.UserService;
 
+import static mobile.ufc.br.novosispu.Constants.CHANNEL_ID;
+import static mobile.ufc.br.novosispu.Constants.FRAGMENT_HOME_ID;
 import static mobile.ufc.br.novosispu.Constants.FRAGMENT_NEW_DEMAND_ID;
 
 /**
@@ -55,6 +68,7 @@ public class HomeFragment extends Fragment {
 
     private DemandService demandService;
     private LikeService likeService;
+    private UserService userService;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -71,6 +85,7 @@ public class HomeFragment extends Fragment {
 
         demandService = new DemandService();
         likeService = new LikeService();
+        userService = new UserService();
     }
 
     @Override

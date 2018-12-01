@@ -1,5 +1,6 @@
 package mobile.ufc.br.novosispu;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -13,6 +14,7 @@ import mobile.ufc.br.novosispu.fragments.HomeFragment;
 import mobile.ufc.br.novosispu.fragments.MapDemandsFragment;
 import mobile.ufc.br.novosispu.fragments.NewDemandFragment;
 import mobile.ufc.br.novosispu.fragments.OptionsFragment;
+import mobile.ufc.br.novosispu.service.NotificationService;
 
 import static mobile.ufc.br.novosispu.Constants.*;
 
@@ -34,9 +36,10 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        // fm.beginTransaction().add(R.id.main_container, fragment3, "3").hide(fragment3).commit();
-        // fm.beginTransaction().add(R.id.main_container, mapDemandFragment, "2").hide(mapDemandFragment).commit();
         fm.beginTransaction().add(R.id.main_container, homeFragment).commit();
+
+        Intent notificacaoService = new Intent(this, NotificationService.class);
+        startService(notificacaoService);
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener

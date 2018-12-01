@@ -9,4 +9,6 @@ public class Constants {
     public static final String FRAGMENT_MAP_ID = "fragment-map";
     public static final String FRAGMENT_NEW_DEMAND_ID = "fragment-new-demand";
     public static final String FRAGMENT_OPTIONS_ID = "fragment-options";
+
+    public static final String CHANNEL_ID = "novo-sispu-notifications";
 }
