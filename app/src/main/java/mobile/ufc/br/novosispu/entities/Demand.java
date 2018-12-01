@@ -2,15 +2,15 @@ package mobile.ufc.br.novosispu.entities;
 
 public class Demand {
     private String key;
-    private long lat;
-    private long lng;
+    private double lat;
+    private double lng;
     private long time;
     private String description;
     private String title;
     private User user;
     private String imageUrl;
 
-    public Demand(String key, long lat, long lng, long time, String description, String title, User user) {
+    public Demand(String key, double lat, double lng, long time, String description, String title, User user) {
         this.key = key;
         this.lat = lat;
         this.lng = lng;
@@ -20,7 +20,7 @@ public class Demand {
         this.user = user;
     }
 
-    public Demand(String key, long lat, long lng, long time, String description, String title, User user, String imageUrl) {
+    public Demand(String key, double lat, double lng, long time, String description, String title, User user, String imageUrl) {
         this.key = key;
         this.lat = lat;
         this.lng = lng;
@@ -33,8 +33,8 @@ public class Demand {
 
     public Demand() {
         this.key = "";
-        this.lat = 0;
-        this.lng = 0;
+        this.lat = 0.0;
+        this.lng = 0.0;
         this.time = 0;
         this.description = "";
         this.title = "";
@@ -49,19 +49,19 @@ public class Demand {
         this.key = key;
     }
 
-    public long getLat() {
+    public double getLat() {
         return lat;
     }
 
-    public void setLat(long lat) {
+    public void setLat(double lat) {
         this.lat = lat;
     }
 
-    public long getLng() {
+    public double getLng() {
         return lng;
     }
 
-    public void setLng(long lng) {
+    public void setLng(double lng) {
         this.lng = lng;
     }
 
