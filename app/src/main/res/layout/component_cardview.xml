@@ -33,21 +33,24 @@
                 android:layout_height="wrap_content"
                 android:text="Aa aaaaaaaaaaa aaaaaaaaaaaa aaaaaaaaaa aaaaaaaaaaaaaaaa aaaaaaaaa"
                 android:textColor="#555" />
+            <TextView
+                android:id="@+id/userTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Por: Jackson Maia"
+                android:textColor="#777"
+                android:textAlignment="textEnd"
+                android:textStyle="bold"
+                android:textSize="7pt"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <Button
                 android:id="@+id/likeDemandButton"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Like (5)"
-                android:theme="@style/PrimaryFlatButton" />
-            <Button
-                android:id="@+id/viewDemandButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="View"
                 android:theme="@style/PrimaryFlatButton" />
         </LinearLayout>
     </LinearLayout>

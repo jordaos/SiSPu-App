@@ -37,7 +37,7 @@ public class NotificationService extends Service {
     }
 
     public int onStartCommand(Intent intent, int flags, int startId) {
-        LikeService likeService = new LikeService();
+        final LikeService likeService = new LikeService();
         final UserService userService = new UserService();
         final DemandService demandService = new DemandService();
         DatabaseReference ref = likeService.getLikesRef();
@@ -61,6 +61,9 @@ public class NotificationService extends Service {
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                         User user = dataSnapshot.getValue(User.class);
                                         sendNotifications(user.getName() + " curtiu sua demanda");
+
+                                        like.setNotified(true);
+                                        likeService.save(like);
                                     }
 
                                     @Override

@@ -26,6 +26,7 @@ public class CardViewComponent extends CardView {
 
     private TextView titleTextView;
     private TextView descriptionTextView;
+    private TextView userTextView;
     private ImageView demandImageView;
     private Button likeDemandButton;
     private Demand demand;
@@ -46,6 +47,7 @@ public class CardViewComponent extends CardView {
 
         titleTextView = (TextView) findViewById(R.id.titleTextView);
         descriptionTextView = (TextView) findViewById(R.id.descriptionTextView);
+        userTextView = (TextView) findViewById(R.id.userTextView);
         demandImageView = (ImageView) findViewById(R.id.demandImageView);
 
         likeDemandButton = (Button) findViewById(R.id.likeDemandButton);
@@ -70,6 +72,10 @@ public class CardViewComponent extends CardView {
         likeDemandButton.setText("Like (" + qtd + ")");
     }
 
+    public void setUser(String userName) {
+        userTextView.setText("Por: " + userName);
+    }
+
     public void setDemandImage(String imageUrl) {
         try {
             Bitmap imageBitmap = decodeFromFirebaseBase64(imageUrl);
@@ -83,6 +89,7 @@ public class CardViewComponent extends CardView {
         this.demand = demand;
         setTitle(demand.getTitle());
         setDescription(demand.getDescription());
+        setUser(demand.getUser().getName());
 
         if(demand.getImageUrl() != null && !demand.getImageUrl().equals("")) {
             setDemandImage(demand.getImageUrl());
