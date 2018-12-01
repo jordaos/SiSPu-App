@@ -6,19 +6,13 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.location.Location;
-import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.provider.SyncStateContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,11 +23,9 @@ import android.widget.ImageView;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.ByteArrayOutputStream;
@@ -46,7 +38,6 @@ import mobile.ufc.br.novosispu.entities.User;
 import mobile.ufc.br.novosispu.service.DemandService;
 import mobile.ufc.br.novosispu.service.UserService;
 
-import static mobile.ufc.br.novosispu.Constants.FIREBASE_CHILD_DEMANDS;
 import static mobile.ufc.br.novosispu.Constants.FRAGMENT_HOME_ID;
 
 public class NewDemandFragment extends Fragment {
@@ -83,7 +74,7 @@ public class NewDemandFragment extends Fragment {
         demandService = new DemandService();
         userService = new UserService();
 
-        initLocationListne();
+        initLocationListner();
     }
 
 
@@ -173,7 +164,7 @@ public class NewDemandFragment extends Fragment {
         super.onDetach();
     }
 
-    private void initLocationListne() {
+    private void initLocationListner() {
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
 
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
