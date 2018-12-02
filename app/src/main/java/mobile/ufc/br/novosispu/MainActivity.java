@@ -12,6 +12,7 @@ import android.view.MenuItem;
 
 import mobile.ufc.br.novosispu.fragments.HomeFragment;
 import mobile.ufc.br.novosispu.fragments.MapDemandsFragment;
+import mobile.ufc.br.novosispu.fragments.MyDemandsFragment;
 import mobile.ufc.br.novosispu.fragments.NewDemandFragment;
 import mobile.ufc.br.novosispu.fragments.OptionsFragment;
 import mobile.ufc.br.novosispu.service.NotificationService;
@@ -25,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     final Fragment mapDemandFragment = MapDemandsFragment.newInstance();
     final Fragment newDemandFragment = NewDemandFragment.newInstance();
     final Fragment optionsFragment = OptionsFragment.newInstance();
+    final Fragment myDemandsFragment = MyDemandsFragment.newInstance();
     final FragmentManager fm = getSupportFragmentManager();
     private Fragment active = homeFragment;
 
@@ -44,7 +46,6 @@ public class MainActivity extends AppCompatActivity {
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
@@ -56,6 +57,9 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 case R.id.navigation_options:
                     changeFragmentTo(FRAGMENT_OPTIONS_ID);
+                    return true;
+                case R.id.navigation_my_demands:
+                    changeFragmentTo(FRAGMENT_MY_DEMANDS_ID);
                     return true;
             }
             return false;
@@ -76,6 +80,9 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case FRAGMENT_OPTIONS_ID:
                 fragmentTransaction.replace(R.id.main_container, optionsFragment);
+                break;
+            case FRAGMENT_MY_DEMANDS_ID:
+                fragmentTransaction.replace(R.id.main_container, myDemandsFragment);
                 break;
             default:
                 fragmentTransaction.replace(R.id.main_container, homeFragment);

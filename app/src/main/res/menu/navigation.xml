@@ -12,6 +12,11 @@
         android:title="@string/title_map" />
 
     <item
+        android:id="@+id/navigation_my_demands"
+        android:icon="@android:drawable/ic_menu_myplaces"
+        android:title="@string/title_my_demands" />
+
+    <item
         android:id="@+id/navigation_options"
         android:icon="@android:drawable/ic_menu_preferences"
         android:title="@string/title_options" />
