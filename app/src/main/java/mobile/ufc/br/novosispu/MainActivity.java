@@ -1,6 +1,7 @@
 package mobile.ufc.br.novosispu;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -10,6 +11,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
+import mobile.ufc.br.novosispu.broadcast.MyBroadcastReceiver;
 import mobile.ufc.br.novosispu.fragments.HomeFragment;
 import mobile.ufc.br.novosispu.fragments.MapDemandsFragment;
 import mobile.ufc.br.novosispu.fragments.MyDemandsFragment;
@@ -42,6 +44,13 @@ public class MainActivity extends AppCompatActivity {
 
         Intent notificacaoService = new Intent(this, NotificationService.class);
         startService(notificacaoService);
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("android.intent.action.SCREEN_OFF");
+        filter.addAction("android.intent.action.SCREEN_ON");
+
+        MyBroadcastReceiver myBroadcastReceiver = new MyBroadcastReceiver();
+        registerReceiver(myBroadcastReceiver, filter);
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -88,6 +97,10 @@ public class MainActivity extends AppCompatActivity {
                 fragmentTransaction.replace(R.id.main_container, homeFragment);
         }
         fragmentTransaction.commit();
+    }
+
+    public void closeActivity(){
+        finish();
     }
 
 }

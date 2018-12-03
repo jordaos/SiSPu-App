@@ -44,6 +44,12 @@
         </activity>
 
         <service android:name=".service.NotificationService" />
+
+        <receiver android:name=".broadcast.MyBroadcastReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.SCREEN_OFF" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

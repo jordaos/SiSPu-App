@@ -39,6 +39,8 @@ import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -49,10 +51,16 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+
+import mobile.ufc.br.novosispu.entities.User;
+import mobile.ufc.br.novosispu.service.UserService;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -86,12 +94,16 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     LoginButton loginFacebookButton;
     CallbackManager mCallbackManager;
 
+    private UserService userService;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
         mAuth = FirebaseAuth.getInstance();
+
+        userService = new UserService();
 
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
@@ -135,9 +147,26 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         loginFacebookButton.setReadPermissions("email", "public_profile");
         loginFacebookButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
-            public void onSuccess(LoginResult loginResult) {
-                Log.d(TAG, "facebook:onSuccess:" + loginResult);
-                handleFacebookAccessToken(loginResult.getAccessToken());
+            public void onSuccess(final LoginResult loginResult) {
+                GraphRequest request = GraphRequest.newMeRequest(
+                        loginResult.getAccessToken(),
+                        new GraphRequest.GraphJSONObjectCallback() {
+                            @Override
+                            public void onCompleted(JSONObject object, GraphResponse response) {
+                                Log.v("LoginActivity", response.toString());
+
+                                // Application code
+                                try {
+                                    String name = object.getString("name");
+                                    User user = new User(name, "");
+
+                                    handleFacebookAccessToken(loginResult.getAccessToken(), user);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+                request.executeAsync();
             }
 
             @Override
@@ -280,7 +309,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
     }
 
-    private void handleFacebookAccessToken(AccessToken token) {
+    private void handleFacebookAccessToken(AccessToken token, final User user) {
         Log.d(TAG, "handleFacebookAccessToken:" + token);
 
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
@@ -290,9 +319,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithCredential:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);
+                            FirebaseUser fbUser = mAuth.getCurrentUser();
+                            String userKey = mAuth.getCurrentUser().getUid();
+                            user.setKey(userKey);
+                            userService.save(user);
+                            updateUI(fbUser);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
