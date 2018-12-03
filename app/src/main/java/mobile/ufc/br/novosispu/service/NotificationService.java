@@ -55,7 +55,7 @@ public class NotificationService extends Service {
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             Demand demand = dataSnapshot.getValue(Demand.class);
 
-                            if(demand.getUser().getKey().equals(currentUserKey) && !like.isNotified()) {
+                            if(demand != null && demand.getUser().getKey() != null && demand.getUser().getKey().equals(currentUserKey) && !like.isNotified()) {
                                 userService.getUsersRef().child(like.getUserKey()).addValueEventListener(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
