@@ -19,11 +19,15 @@ import android.widget.Toast;
 
 import java.io.IOException;
 
+import mobile.ufc.br.novosispu.MainActivity;
 import mobile.ufc.br.novosispu.R;
 import mobile.ufc.br.novosispu.entities.Demand;
 import mobile.ufc.br.novosispu.service.DemandService;
 import mobile.ufc.br.novosispu.service.LikeService;
 import mobile.ufc.br.novosispu.service.UserService;
+
+import static mobile.ufc.br.novosispu.Constants.FRAGMENT_HOME_ID;
+import static mobile.ufc.br.novosispu.Constants.FRAGMENT_NEW_DEMAND_ID;
 
 public class CardViewComponent extends CardView {
 
@@ -120,6 +124,13 @@ public class CardViewComponent extends CardView {
             @Override
             public void onClick(View view) {
                 demandService.remove(demand);
+            }
+        });
+
+        editDemandButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((MainActivity)getContext()).changeFragmentTo(FRAGMENT_NEW_DEMAND_ID, demand.getKey());
             }
         });
     }

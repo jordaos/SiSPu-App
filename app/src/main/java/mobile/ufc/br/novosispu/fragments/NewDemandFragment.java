@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -13,6 +14,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +31,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.Date;
 
 import mobile.ufc.br.novosispu.MainActivity;
@@ -38,7 +41,9 @@ import mobile.ufc.br.novosispu.entities.User;
 import mobile.ufc.br.novosispu.service.DemandService;
 import mobile.ufc.br.novosispu.service.UserService;
 
+import static mobile.ufc.br.novosispu.Constants.DEMAND_KEY_ID;
 import static mobile.ufc.br.novosispu.Constants.FRAGMENT_HOME_ID;
+import static mobile.ufc.br.novosispu.Constants.TAG;
 
 public class NewDemandFragment extends Fragment {
 
@@ -58,13 +63,22 @@ public class NewDemandFragment extends Fragment {
 
     private FusedLocationProviderClient mFusedLocationClient;
 
+    Demand demand;
+
     public NewDemandFragment() {
-        // Required empty public constructor
+        demand = null;
     }
 
-    // TODO: Rename and change types and number of parameters
     public static NewDemandFragment newInstance() {
         NewDemandFragment fragment = new NewDemandFragment();
+        return fragment;
+    }
+
+    public static NewDemandFragment newInstance(String demandKey) {
+        NewDemandFragment fragment = new NewDemandFragment();
+        Bundle args = new Bundle();
+        args.putString(DEMAND_KEY_ID, demandKey);
+        fragment.setArguments(args);
         return fragment;
     }
 
@@ -99,13 +113,15 @@ public class NewDemandFragment extends Fragment {
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         User user = dataSnapshot.getValue(User.class);
 
-                        Demand demand = new Demand();
+                        if(demand == null) {
+                            demand = new Demand();
+                            demand.setTime(new Date().getTime());
+                            demand.setUser(user);
+                            demand.setLat(location.getLatitude());
+                            demand.setLng(location.getLongitude());
+                        }
                         demand.setTitle(titleNewDemandEditText.getText().toString());
                         demand.setDescription(descriptionNewDemandEditText.getText().toString());
-                        demand.setTime(new Date().getTime());
-                        demand.setUser(user);
-                        demand.setLat(location.getLatitude());
-                        demand.setLng(location.getLongitude());
 
                         // Image
                         if(imageBitmap != null) {
@@ -135,6 +151,14 @@ public class NewDemandFragment extends Fragment {
                 onLaunchCamera();
             }
         });
+
+        Bundle args = getArguments();
+        if(args != null) {
+            String demandKey = args.getString(DEMAND_KEY_ID, null);
+            if (demandKey != null) {
+                loadDemand(demandKey);
+            }
+        }
     }
 
     public void onLaunchCamera() {
@@ -181,5 +205,33 @@ public class NewDemandFragment extends Fragment {
                         }
                     }
                 });
+    }
+
+    public void loadDemand(String demandKey) {
+        demandService.getDemandRef().child(demandKey).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                demand = dataSnapshot.getValue(Demand.class);
+                Log.d(TAG, demand.toString());
+                titleNewDemandEditText.setText(demand.getTitle());
+                descriptionNewDemandEditText.setText(demand.getDescription());
+                try {
+                    Bitmap imageBitmap = decodeFromFirebaseBase64(demand.getImageUrl());
+                    mImageLabel.setImageBitmap(imageBitmap);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
+            }
+        });
+    }
+
+    private Bitmap decodeFromFirebaseBase64(String image) throws IOException {
+        byte[] decodedByteArray = android.util.Base64.decode(image, Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(decodedByteArray, 0, decodedByteArray.length);
     }
 }

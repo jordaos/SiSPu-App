@@ -12,4 +12,7 @@ public class Constants {
     public static final String FRAGMENT_MY_DEMANDS_ID = "fragment-my-demands";
 
     public static final String CHANNEL_ID = "novo-sispu-notifications";
+
+    public static final String DEMAND_KEY_ID = "demand-key-id";
+    public static final String TAG = "MY-DEBUG-TAG";
 }

@@ -110,6 +110,20 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
 
+    public void changeFragmentTo(String fragmentId, String paramValue) {
+        switch (fragmentId) {
+            case FRAGMENT_NEW_DEMAND_ID:
+                NewDemandFragment newDemandFragmentParam = NewDemandFragment.newInstance(paramValue);
+                fm.beginTransaction().add(R.id.main_container, newDemandFragmentParam, FRAGMENT_OPTIONS_ID).hide(newDemandFragmentParam).commit();
+                fm.beginTransaction().hide(active).show(newDemandFragmentParam).commit();
+                active = newDemandFragmentParam;
+                break;
+            default:
+                changeFragmentTo(fragmentId);
+                break;
+        }
+    }
+
     public void closeActivity(){
         finish();
     }
