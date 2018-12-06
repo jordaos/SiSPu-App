@@ -35,6 +35,10 @@ public class DemandService {
         demandRef.child(key).setValue(demand);
     }
 
+    public void remove(Demand demand) {
+        demandRef.child(demand.getKey()).removeValue();
+    }
+
     public DatabaseReference getDemandRef() {
         return demandRef;
     }

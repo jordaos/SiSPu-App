@@ -40,8 +40,6 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        fm.beginTransaction().add(R.id.main_container, homeFragment).commit();
-
         Intent notificacaoService = new Intent(this, NotificationService.class);
         startService(notificacaoService);
 
@@ -51,6 +49,12 @@ public class MainActivity extends AppCompatActivity {
 
         MyBroadcastReceiver myBroadcastReceiver = new MyBroadcastReceiver();
         registerReceiver(myBroadcastReceiver, filter);
+
+        fm.beginTransaction().add(R.id.main_container, optionsFragment, FRAGMENT_OPTIONS_ID).hide(optionsFragment).commit();
+        fm.beginTransaction().add(R.id.main_container, mapDemandFragment, FRAGMENT_MAP_ID).hide(mapDemandFragment).commit();
+        fm.beginTransaction().add(R.id.main_container, myDemandsFragment, FRAGMENT_MY_DEMANDS_ID).hide(myDemandsFragment).commit();
+        fm.beginTransaction().add(R.id.main_container, newDemandFragment, FRAGMENT_NEW_DEMAND_ID).hide(newDemandFragment).commit();
+        fm.beginTransaction().add(R.id.main_container, homeFragment, FRAGMENT_HOME_ID).commit();
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -79,22 +83,29 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
         switch (fragmentId){
             case FRAGMENT_HOME_ID:
-                fragmentTransaction.replace(R.id.main_container, homeFragment);
+                fm.beginTransaction().hide(active).show(homeFragment).commit();
+                active = homeFragment;
                 break;
             case FRAGMENT_MAP_ID:
-                fragmentTransaction.replace(R.id.main_container, mapDemandFragment);
+                fm.beginTransaction().hide(active).show(mapDemandFragment).commit();
+                active = mapDemandFragment;
                 break;
             case FRAGMENT_NEW_DEMAND_ID:
-                fragmentTransaction.replace(R.id.main_container, newDemandFragment);
+                fm.beginTransaction().hide(active).show(newDemandFragment).commit();
+                active = newDemandFragment;
                 break;
             case FRAGMENT_OPTIONS_ID:
-                fragmentTransaction.replace(R.id.main_container, optionsFragment);
+                fm.beginTransaction().hide(active).show(optionsFragment).commit();
+                active = optionsFragment;
                 break;
             case FRAGMENT_MY_DEMANDS_ID:
-                fragmentTransaction.replace(R.id.main_container, myDemandsFragment);
+                fm.beginTransaction().hide(active).show(myDemandsFragment).commit();
+                active = myDemandsFragment;
                 break;
             default:
-                fragmentTransaction.replace(R.id.main_container, homeFragment);
+                fm.beginTransaction().hide(active).show(homeFragment).commit();
+                active = homeFragment;
+                break;
         }
         fragmentTransaction.commit();
     }

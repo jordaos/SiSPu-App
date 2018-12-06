@@ -15,4 +15,18 @@
         <item name="colorAccent">#FFAB40</item>
     </style>
 
+    <style name="DeleteFlatButton" parent="Theme.AppCompat.Light">
+        <item name="android:buttonStyle">
+            @style/Widget.AppCompat.Button.Borderless.Colored
+        </item>
+        <item name="colorAccent">#ff3228</item>
+    </style>
+
+    <style name="EditFlatButton" parent="Theme.AppCompat.Light">
+        <item name="android:buttonStyle">
+            @style/Widget.AppCompat.Button.Borderless.Colored
+        </item>
+        <item name="colorAccent">#6098ff</item>
+    </style>
+
 </resources>

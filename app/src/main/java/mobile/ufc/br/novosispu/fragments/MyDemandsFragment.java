@@ -105,6 +105,7 @@ public class MyDemandsFragment extends Fragment {
                     if(demand.getUser().getKey().equals(currentUserKey)) {
                         final CardViewComponent card = new CardViewComponent(getContext());
                         card.setDemand(demand);
+                        card.editable();
 
                         likeService.getLikesRef().addValueEventListener(new ValueEventListener() {
                             @Override

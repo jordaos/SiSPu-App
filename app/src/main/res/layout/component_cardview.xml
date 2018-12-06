@@ -44,14 +44,29 @@
                 android:textSize="7pt"/>
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/buttonsContentLinearLayout"
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:gravity="center">
             <Button
                 android:id="@+id/likeDemandButton"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Like (5)"
                 android:theme="@style/PrimaryFlatButton" />
+            <Button
+                android:id="@+id/editDemandButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Editar"
+                android:theme="@style/EditFlatButton" />
+            <Button
+                android:id="@+id/deleteDemandButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Apagar"
+                android:theme="@style/DeleteFlatButton" />
         </LinearLayout>
     </LinearLayout>
 </android.support.v7.widget.CardView>
