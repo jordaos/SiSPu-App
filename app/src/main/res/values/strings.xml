@@ -13,7 +13,7 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
-    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_main">SiSPu</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
@@ -32,4 +32,6 @@
     <string name="title_options">Opções</string>
     <string name="title_map">Mapa</string>
     <string name="title_my_demands">Minhas</string>
+    <string name="title_login">Login</string>
+    <string name="title_register">Registre-se</string>
 </resources>

@@ -32,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
     final FragmentManager fm = getSupportFragmentManager();
     private Fragment active = homeFragment;
 
+    Intent notificacaoService;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        Intent notificacaoService = new Intent(this, NotificationService.class);
+        notificacaoService = new Intent(this, NotificationService.class);
         startService(notificacaoService);
 
         IntentFilter filter = new IntentFilter();
@@ -126,6 +128,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void closeActivity(){
         finish();
+    }
+
+    public void stopService() {
+        stopService(notificacaoService);
     }
 
 }

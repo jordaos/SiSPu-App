@@ -14,7 +14,10 @@ import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 
 import mobile.ufc.br.novosispu.LoginActivity;
+import mobile.ufc.br.novosispu.MainActivity;
 import mobile.ufc.br.novosispu.R;
+
+import static mobile.ufc.br.novosispu.Constants.FRAGMENT_HOME_ID;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -53,6 +56,8 @@ public class OptionsFragment extends Fragment {
             public void onClick(View view) {
                 FirebaseAuth.getInstance().signOut();
                 LoginManager.getInstance().logOut();
+
+                ((MainActivity)getActivity()).stopService();
 
                 Intent intent = new Intent(getActivity(), LoginActivity.class);
                 startActivity(intent);
