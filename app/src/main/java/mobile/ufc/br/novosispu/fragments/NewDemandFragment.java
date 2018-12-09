@@ -133,6 +133,7 @@ public class NewDemandFragment extends Fragment {
                         }
 
                         demandService.save(demand);
+                        clearForm();
 
                         ((MainActivity)getActivity()).changeFragmentTo(FRAGMENT_HOME_ID);
                     }
@@ -159,6 +160,14 @@ public class NewDemandFragment extends Fragment {
                 loadDemand(demandKey);
             }
         }
+    }
+
+    private void clearForm() {
+        descriptionNewDemandEditText.setText("");
+        titleNewDemandEditText.setText("");
+        mImageLabel.setImageDrawable(null);
+        imageBitmap = null;
+        demand = null;
     }
 
     public void onLaunchCamera() {
@@ -215,11 +224,13 @@ public class NewDemandFragment extends Fragment {
                 Log.d(TAG, demand.toString());
                 titleNewDemandEditText.setText(demand.getTitle());
                 descriptionNewDemandEditText.setText(demand.getDescription());
-                try {
-                    Bitmap imageBitmap = decodeFromFirebaseBase64(demand.getImageUrl());
-                    mImageLabel.setImageBitmap(imageBitmap);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                if (demand.getImageUrl() != null) {
+                    try {
+                        Bitmap imageBitmap = decodeFromFirebaseBase64(demand.getImageUrl());
+                        mImageLabel.setImageBitmap(imageBitmap);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
 
