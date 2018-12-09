@@ -38,7 +38,7 @@ public class LikeService {
     }
 
     public void like(final String demandKey, final String userKey) {
-        likesRef.addValueEventListener(new ValueEventListener() {
+        likesRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 boolean liked = false;
@@ -46,6 +46,7 @@ public class LikeService {
                     Like like = item.getValue(Like.class);
                     if (like.getDemandKey().equals(demandKey) && like.getUserKey().equals(userKey)) {
                         liked = true;
+                        likesRef.child(like.getKey()).removeValue();
                         break;
                     }
                 }
