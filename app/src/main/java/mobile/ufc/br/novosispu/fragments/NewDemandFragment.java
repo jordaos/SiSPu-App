@@ -165,7 +165,7 @@ public class NewDemandFragment extends Fragment {
     private void clearForm() {
         descriptionNewDemandEditText.setText("");
         titleNewDemandEditText.setText("");
-        mImageLabel.setImageDrawable(null);
+        mImageLabel.setImageResource(0);
         imageBitmap = null;
         demand = null;
     }

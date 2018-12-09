@@ -11,6 +11,9 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import mobile.ufc.br.novosispu.broadcast.MyBroadcastReceiver;
 import mobile.ufc.br.novosispu.fragments.HomeFragment;
 import mobile.ufc.br.novosispu.fragments.MapDemandsFragment;
@@ -32,7 +35,8 @@ public class MainActivity extends AppCompatActivity {
     final FragmentManager fm = getSupportFragmentManager();
     private Fragment active = homeFragment;
 
-    Intent notificacaoService;
+    private Intent notificacaoService;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
+        mAuth = FirebaseAuth.getInstance();
         notificacaoService = new Intent(this, NotificationService.class);
         startService(notificacaoService);
 
@@ -126,12 +131,23 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void closeActivity(){
-        finish();
-    }
-
     public void stopService() {
         stopService(notificacaoService);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        updateUI(currentUser);
+    }
+
+    private void updateUI(FirebaseUser currentUser) {
+        if(currentUser == null) {
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(intent);
+        }
     }
 
 }
